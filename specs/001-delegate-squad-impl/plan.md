@@ -19,6 +19,15 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 **Constraints**: No extension-owned planning memory in `.specify/`; no custom task routing logic in extension; graceful failure when Squad configuration is missing; support markdown-first and sdk-first Squad team definitions  
 **Scale/Scope**: Single extension repository; one delegated implementation session at a time; supports 1-member through N-member Squad topologies
 
+## TypeScript Integration Steps
+
+1. Source ownership: Keep analyzer sources in `src/` and never execute TypeScript directly from hook scripts.
+2. Build step: Compile TypeScript with Node.js 20+ tooling into `dist/` using project-local `package.json` and `tsconfig.json`.
+3. Runtime handoff: `extension/scripts/bash/*.sh` and `extension/scripts/powershell/*.ps1` execute Node entrypoints from `dist/` only.
+4. Packaging rule: Distribution must contain `extension/` assets plus compiled `dist/`; it must not rely on build-at-install behavior from `specify extension add`.
+5. Quality gate: Run `npm run lint`, `npm test`, and contract validation against compiled output before local dev install and release packaging.
+6. Payload hygiene: Configure `.extensionignore` to exclude non-runtime development artifacts where appropriate.
+
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
@@ -47,6 +56,8 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 
 ```text
 /Users/maik/workspace/private/m4cx/spec-kit-squad-extension/
+├── package.json
+├── tsconfig.json
 ├── extension/
 │   ├── extension.yml
 │   ├── commands/
@@ -73,13 +84,17 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 │   └── contracts/
 │       ├── validators.ts
 │       └── schemas/
+├── dist/
+│   ├── analyzers/
+│   ├── learning-store/
+│   └── contracts/
 └── tests/
     ├── contract/
     ├── integration/
     └── unit/
 ```
 
-**Structure Decision**: Use a split architecture where extension command/hook assets live in `extension/` (Spec-Kit extension-dev-guide aligned) and deterministic logic lives in typed modules under `src/`. Runtime learning data is written to `.squad/squad-kit-memory/` (project-scoped, outside `.specify/`), while this repository stores only extension source and contracts.
+**Structure Decision**: Use a split architecture where extension command/hook assets live in `extension/` (Spec-Kit extension-dev-guide aligned), deterministic logic is authored in `src/`, and runtime execution consumes compiled JavaScript from `dist/`. Runtime learning data is written to `.squad/squad-kit-memory/` (project-scoped, outside `.specify/`), while this repository stores extension source, build config, and contracts.
 
 ## Complexity Tracking
 
