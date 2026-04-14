@@ -24,9 +24,11 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 1. Source ownership: Keep analyzer sources in `src/` and never execute TypeScript directly from hook scripts.
 2. Build step: Compile TypeScript with Node.js 20+ tooling into `dist/` using project-local `package.json` and `tsconfig.json`.
 3. Runtime handoff: `extension/scripts/bash/*.sh` and `extension/scripts/powershell/*.ps1` execute Node entrypoints from `dist/` only.
-4. Packaging rule: Distribution must contain `extension/` assets plus compiled `dist/`; it must not rely on build-at-install behavior from `specify extension add`.
-5. Quality gate: Run `npm run lint`, `npm test`, and contract validation against compiled output before local dev install and release packaging.
-6. Payload hygiene: Configure `.extensionignore` to exclude non-runtime development artifacts where appropriate.
+4. Script linking rule: All script entrypoint paths must resolve from script location to repository-root `dist/` with deterministic, cross-platform relative path handling (no hardcoded absolute paths).
+5. Packaging rule: Distribution must contain `extension/` assets plus compiled `dist/`; it must not rely on build-at-install behavior from `specify extension add`.
+6. Deployment completeness rule: Packaging validation must fail if referenced `dist/` entrypoints are missing or if `dist/` is omitted from release artifact.
+7. Extension ignore rule: `.extensionignore` must exclude TypeScript source/test/dev artifacts but explicitly keep required runtime files in `dist/`.
+8. Quality gate: Run `npm run lint`, `npm test`, and contract validation against compiled output before local dev install and release packaging.
 
 ## Constitution Check
 
@@ -58,6 +60,7 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 /Users/maik/workspace/private/m4cx/spec-kit-squad-extension/
 ├── package.json
 ├── tsconfig.json
+├── .extensionignore
 ├── extension/
 │   ├── extension.yml
 │   ├── commands/
@@ -88,13 +91,15 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 │   ├── analyzers/
 │   ├── learning-store/
 │   └── contracts/
+├── deployment/
+│   └── manifest.txt                    # Explicit list of files included in extension artifact, including dist/**
 └── tests/
     ├── contract/
     ├── integration/
     └── unit/
 ```
 
-**Structure Decision**: Use a split architecture where extension command/hook assets live in `extension/` (Spec-Kit extension-dev-guide aligned), deterministic logic is authored in `src/`, and runtime execution consumes compiled JavaScript from `dist/`. Runtime learning data is written to `.squad/squad-kit-memory/` (project-scoped, outside `.specify/`), while this repository stores extension source, build config, and contracts.
+**Structure Decision**: Use a split architecture where extension command/hook assets live in `extension/` (Spec-Kit extension-dev-guide aligned), deterministic logic is authored in `src/`, and runtime execution consumes compiled JavaScript from `dist/` via explicit script entrypoint mapping in both Bash and PowerShell. Runtime learning data is written to `.squad/squad-kit-memory/` (project-scoped, outside `.specify/`), while this repository stores extension source, build config, and contracts.
 
 ## Complexity Tracking
 
