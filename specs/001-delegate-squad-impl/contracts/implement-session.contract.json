@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://m4cx.dev/spec-kit-squad/contracts/implement-session.contract.json",
+  "title": "Implement Session Contract",
+  "type": "object",
+  "required": [
+    "session_id",
+    "project_id",
+    "squad_mode",
+    "status",
+    "completed_tasks",
+    "failed_tasks",
+    "unassigned_tasks",
+    "summary"
+  ],
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "squad_mode": {
+      "type": "string",
+      "enum": ["markdown-first", "sdk-first"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completed", "failed", "interrupted"]
+    },
+    "completed_tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/taskOutcome"
+      }
+    },
+    "failed_tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/taskOutcome"
+      }
+    },
+    "unassigned_tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/taskOutcome"
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "raw_log_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    }
+  },
+  "$defs": {
+    "taskOutcome": {
+      "type": "object",
+      "required": ["task_id", "title", "status", "details"],
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assignee": {
+          "type": ["string", "null"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["completed", "failed", "unassigned", "skipped"]
+        },
+        "details": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
