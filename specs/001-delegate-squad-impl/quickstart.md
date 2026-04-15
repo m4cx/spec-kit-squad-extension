@@ -44,7 +44,7 @@ Expected output: JSON diagnostics including `is_ready=true` or actionable `issue
 
 Expected behavior:
 
-- `before_implement` hook validates Squad state and task input
+- `before_implement` hook validates Squad state and builds deterministic handoff payload from `tasks.md`
 - extension delegates run to Squad (no in-extension task routing)
 - `after_implement` hook normalizes outcome into contract-compliant JSON
 - learning records are persisted to `.squad/squad-kit-memory/learnings.jsonl`
@@ -58,11 +58,23 @@ Expected behavior:
 
 Expected behavior:
 
-- `before_plan` and `before_tasks` hooks load project-scoped learnings
+- `before_plan` and `before_tasks` hooks load project-scoped learnings and prepare prompt-safe learning digest
 - deterministic filters enforce `project_id` isolation
 - generated artifacts include surfaced constraints/decisions from prior implementation sessions
 
-## 6. Verify contracts and drift checks
+## 6. Handoff integrity checks
+
+```bash
+npm run analyze:handoff
+```
+
+Expected checks:
+
+- `tasks.md` is present and parseable for current feature
+- `task_manifest_hash` in session output matches input `tasks.md`
+- all handed-off task IDs are represented in outcome (`completed`, `failed`, or `unassigned`)
+
+## 7. Verify contracts and drift checks
 
 ```bash
 npm test

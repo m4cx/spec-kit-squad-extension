@@ -1,10 +1,11 @@
 # spec-kit-squad-extension Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-04-14
+Auto-generated from all feature plans. Last updated: 2026-04-15
 
 ## Active Technologies
 - Markdown command surface, Bash 4+/PowerShell 7+ scripts, TypeScript on Node.js 20+ for deterministic analyzers + `specify-cli` extension hooks, `@bradygaster/squad-cli`, optional `@bradygaster/squad-sdk` shape support (`squad.config.ts` + `squad build`), JSON Schema validation tooling for contract files (001-delegate-squad-impl)
 - Project-local `.squad/squad-kit-memory/` (`learnings.jsonl`, `learnings-index.json`, `sessions.log`) (001-delegate-squad-impl)
+- Markdown command/prompt surface plus cross-platform scripts (PowerShell 7+, Bash 4+), with TypeScript/Node 20+ helper modules for deterministic parsers and contract validation + Spec-Kit extension hooks (`before_implement`, `after_implement`, `before_plan`, `before_tasks`), Squad CLI (`@bradygaster/squad-cli`), optional Squad SDK shape awareness (`squad.config.ts`, generated `.squad/` state), JSON Schema validation for contract files (001-delegate-squad-impl)
 
 - Markdown command/prompt surface plus cross-platform scripts (PowerShell 7+, Bash 4+), with TypeScript/Node 20+ helper modules for deterministic parsers and contract validation + Spec-Kit extension hooks, Squad CLI (`@bradygaster/squad-cli`), optional Squad SDK shape awareness (`squad.config.ts`, generated `.squad/` state), JSON Schema validation for contract files (001-delegate-squad-impl)
 
@@ -24,6 +25,7 @@ npm test; npm run lint
 Markdown command/prompt surface plus cross-platform scripts (PowerShell 7+, Bash 4+), with TypeScript/Node 20+ helper modules for deterministic parsers and contract validation: Follow standard conventions
 
 ## Recent Changes
+- 001-delegate-squad-impl: Added Markdown command/prompt surface plus cross-platform scripts (PowerShell 7+, Bash 4+), with TypeScript/Node 20+ helper modules for deterministic parsers and contract validation + Spec-Kit extension hooks (`before_implement`, `after_implement`, `before_plan`, `before_tasks`), Squad CLI (`@bradygaster/squad-cli`), optional Squad SDK shape awareness (`squad.config.ts`, generated `.squad/` state), JSON Schema validation for contract files
 - 001-delegate-squad-impl: Added Markdown command surface, Bash 4+/PowerShell 7+ scripts, TypeScript on Node.js 20+ for deterministic analyzers + `specify-cli` extension hooks, `@bradygaster/squad-cli`, optional `@bradygaster/squad-sdk` shape support (`squad.config.ts` + `squad build`), JSON Schema validation tooling for contract files
 
 - 001-delegate-squad-impl: Added Markdown command/prompt surface plus cross-platform scripts (PowerShell 7+, Bash 4+), with TypeScript/Node 20+ helper modules for deterministic parsers and contract validation + Spec-Kit extension hooks, Squad CLI (`@bradygaster/squad-cli`), optional Squad SDK shape awareness (`squad.config.ts`, generated `.squad/` state), JSON Schema validation for contract files

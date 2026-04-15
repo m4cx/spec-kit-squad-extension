@@ -3,7 +3,7 @@
 ## Decision 1: Extension architecture and hook model
 
 - Decision: Implement using Spec-Kit extension manifest + command/hook model, with hooks on `before_implement`, `after_implement`, `before_plan`, and `before_tasks`.
-- Rationale: This is the native Spec-Kit extension path and aligns with `EXTENSION-DEVELOPMENT-GUIDE.md` validation and naming rules. It gives automatic lifecycle integration without patching Spec-Kit core behavior.
+- Rationale: This is the native Spec-Kit extension path and aligns with `EXTENSION-DEVELOPMENT-GUIDE.md` validation and naming rules. It gives automatic lifecycle integration without patching Spec-Kit core behavior. `before_implement` is reserved for deterministic `tasks.md` handoff creation; `before_plan` and `before_tasks` are reserved for learning feedback injection.
 - Alternatives considered: A custom Python plugin layer was rejected because it bypasses standard extension packaging and would increase coupling to internals.
 
 ## Decision 2: Deterministic analysis layer
@@ -29,3 +29,9 @@
 - Decision: Version-gate parsers, support graceful degradation, and keep an explicit compatibility matrix for Squad CLI ranges.
 - Rationale: Squad states alpha status and evolving interfaces; deterministic behavior requires controlled adaptation rather than hard failure on minor format shifts.
 - Alternatives considered: Strict exact-version lock was rejected as too brittle; no version checks were rejected as too risky.
+
+## Decision 6: Handoff source-of-truth and learning feedback contract
+
+- Decision: Use `tasks.md` as the only input source for delegation handoff payload generation and require learning replay into `/speckit.plan` and `/speckit.tasks` through pre-hooks.
+- Rationale: The implementation request explicitly requires handoff from Spec-Kit to Squad to be managed from `tasks.md`, and requires Squad knowledge to be included in planning and task generation. A single canonical handoff source prevents drift and makes diagnostics deterministic.
+- Alternatives considered: Building handoff directly from plan/spec was rejected because it can diverge from generated task execution intent; manual learning copy was rejected because it is non-repeatable.

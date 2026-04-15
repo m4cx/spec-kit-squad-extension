@@ -31,6 +31,8 @@
 - Fields:
   - `session_id` (string, required)
   - `project_id` (string, required)
+  - `tasks_source_path` (string, required, default: `specs/<feature>/tasks.md`)
+  - `task_manifest_hash` (string, required)
   - `started_at` (ISO-8601 datetime, required)
   - `completed_at` (ISO-8601 datetime, nullable)
   - `input_tasks_count` (integer >= 0, required)
@@ -82,12 +84,33 @@
   - `record_count` (integer >= 0, required)
   - `keyword_map` (object: keyword -> array of learning IDs, required)
 
+## Entity: TaskHandoffPayload
+
+- Purpose: Deterministic handoff package created from `tasks.md` before Squad execution
+- Fields:
+  - `session_id` (string, required)
+  - `project_id` (string, required)
+  - `tasks_source_path` (string, required)
+  - `task_manifest_hash` (string, required)
+  - `tasks` (array of task objects, required)
+
+## Entity: PlanningContextPackage
+
+- Purpose: Injected context for `/speckit.plan` and `/speckit.tasks`
+- Fields:
+  - `project_id` (string, required)
+  - `generated_at` (ISO-8601 datetime, required)
+  - `learning_digest` (array of normalized summaries, required)
+  - `source_sessions` (array of `session_id`, required)
+
 ## Relationships
 
 - One `DelegationSession` has one optional `SquadOutcome`.
 - One `DelegationSession` has many `LearningRecord` entries.
+- One `DelegationSession` has one `TaskHandoffPayload` created from `tasks.md`.
 - One `project_id` has many `DelegationSession` records and many `LearningRecord` records.
 - One `LearningIndex` summarizes many `LearningRecord` entries for a single `project_id`.
+- One `PlanningContextPackage` is generated from `LearningIndex` and feeds both `/speckit.plan` and `/speckit.tasks` pre-hooks.
 
 ## State transitions
 

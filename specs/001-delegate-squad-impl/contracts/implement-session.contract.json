@@ -6,6 +6,8 @@
   "required": [
     "session_id",
     "project_id",
+    "tasks_source_path",
+    "task_manifest_hash",
     "squad_mode",
     "status",
     "completed_tasks",
@@ -19,6 +21,14 @@
       "minLength": 1
     },
     "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tasks_source_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_manifest_hash": {
       "type": "string",
       "minLength": 1
     },
