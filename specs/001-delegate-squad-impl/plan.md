@@ -16,18 +16,18 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 **Target Platform**: macOS/Linux/Windows developer environments using Spec-Kit + Copilot + Squad
 **Project Type**: Spec-Kit extension package with deterministic analysis modules  
 **Performance Goals**: Parse and validate `tasks.md` handoff <=2s for <=500 tasks; learning lookup for plan/tasks <=2s for <=10k learning records  
-**Constraints**: Handoff must be based on `tasks.md`; extension must not implement custom task routing; learnings must be injected into `/speckit.plan` and `/speckit.tasks`; extension-owned planning memory must stay outside `.specify/`; dist entrypoints must be script-linked and present in release artifact  
+**Constraints**: Handoff must be based on `tasks.md`; extension must not implement custom task routing; learnings must be injected into `/speckit.plan` and `/speckit.tasks`; extension-owned planning memory must stay outside `.specify/`; runtime entrypoints must be compiled into `extension/dist/`, script-linked, and present in the shipped extension artifact  
 **Scale/Scope**: One feature delegation session at a time; supports 1-member to N-member Squad team topologies without extension code changes
 
 ## TypeScript Integration Steps
 
 1. Source ownership: Keep analyzer sources in `src/` and never execute TypeScript directly from hook scripts.
-2. Build step: Compile TypeScript with Node.js 20+ tooling into `dist/` using project-local `package.json` and `tsconfig.json`.
-3. Runtime handoff: `extension/scripts/bash/*.sh` and `extension/scripts/powershell/*.ps1` execute Node entrypoints from `dist/` only.
-4. Script linking rule: All script entrypoint paths must resolve from script location to repository-root `dist/` with deterministic, cross-platform relative path handling (no hardcoded absolute paths).
-5. Packaging rule: Distribution must contain `extension/` assets plus compiled `dist/`; it must not rely on build-at-install behavior from `specify extension add`.
-6. Deployment completeness rule: Packaging validation must fail if referenced `dist/` entrypoints are missing or if `dist/` is omitted from release artifact.
-7. Extension ignore rule: `.extensionignore` must exclude TypeScript source/test/dev artifacts but explicitly keep required runtime files in `dist/`.
+2. Build step: Compile TypeScript with Node.js 20+ tooling into `extension/dist/` using project-local `package.json` and `tsconfig.json`.
+3. Runtime handoff: `extension/scripts/bash/*.sh` and `extension/scripts/powershell/*.ps1` execute Node entrypoints from `extension/dist/` only.
+4. Script linking rule: All script entrypoint paths must resolve from script location to sibling `extension/dist/` runtime assets with deterministic, cross-platform relative path handling (no hardcoded absolute paths).
+5. Packaging rule: Distribution must ship compiled runtime inside `extension/dist/`; it must not rely on build-at-install behavior from `specify extension add`.
+6. Deployment completeness rule: Packaging validation must fail if referenced `extension/dist/` entrypoints are missing or if `extension/dist/` is omitted from release artifact.
+7. Extension ignore rule: `.extensionignore` must exclude TypeScript source/test/dev artifacts but explicitly keep required runtime files in `extension/dist/`.
 8. Quality gate: Run `npm run lint`, `npm test`, and contract validation against compiled output before local dev install and release packaging.
 
 ## Handoff and Learning Feedback Flow
@@ -91,6 +91,10 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 │           ├── collect-learnings.ps1
 │           ├── inject-plan-learnings.ps1
 │           └── inject-task-learnings.ps1
+│   ├── dist/
+│   │   ├── analyzers/
+│   │   ├── learning-store/
+│   │   └── contracts/
 ├── src/
 │   ├── analyzers/
 │   │   ├── readiness/
@@ -104,19 +108,15 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 │   └── contracts/
 │       ├── validators.ts
 │       └── schemas/
-├── dist/
-│   ├── analyzers/
-│   ├── learning-store/
-│   └── contracts/
 ├── deployment/
-│   └── manifest.txt                 # Must include dist/** and referenced script/runtime assets
+│   └── manifest.txt                 # Must include extension/dist/** and referenced script/runtime assets
 └── tests/
     ├── contract/
     ├── integration/
     └── unit/
 ```
 
-**Structure Decision**: Use a split architecture where extension command/hook assets live in `extension/` (Spec-Kit extension-dev-guide aligned), deterministic logic is authored in `src/`, and runtime execution consumes compiled JavaScript from `dist/` via explicit script entrypoint mapping in both Bash and PowerShell. `tasks.md` is the canonical handoff input to Squad implementation, and project-scoped learnings from Squad sessions are fed back into `/speckit.plan` and `/speckit.tasks` through dedicated pre-hooks.
+**Structure Decision**: Use a split architecture where extension command/hook assets and compiled runtime both live in `extension/` (Spec-Kit extension-dev-guide aligned), deterministic logic is authored in `src/`, and runtime execution consumes compiled JavaScript from `extension/dist/` via explicit script entrypoint mapping in both Bash and PowerShell. `tasks.md` is the canonical handoff input to Squad implementation, and project-scoped learnings from Squad sessions are fed back into `/speckit.plan` and `/speckit.tasks` through dedicated pre-hooks.
 
 ## Complexity Tracking
 

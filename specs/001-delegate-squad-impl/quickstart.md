@@ -34,7 +34,7 @@ Then run extension analyzer entrypoint (example):
 npm run validate:readiness
 ```
 
-Expected output: JSON diagnostics including `is_ready=true` or actionable `issues[]`.
+Expected output: JSON diagnostics including `is_ready=true` or actionable `issues[]`, produced by compiled runtime in `extension/dist/`.
 
 ## 4. Run delegated implementation
 
@@ -73,6 +73,7 @@ Expected checks:
 - `tasks.md` is present and parseable for current feature
 - `task_manifest_hash` in session output matches input `tasks.md`
 - all handed-off task IDs are represented in outcome (`completed`, `failed`, or `unassigned`)
+- referenced runtime entrypoints exist under `extension/dist/`
 
 ## 7. Verify contracts and drift checks
 

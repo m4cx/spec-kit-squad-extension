@@ -9,7 +9,7 @@
 ## Decision 2: Deterministic analysis layer
 
 - Decision: Add deterministic analyzers in TypeScript/Node 20+ for squad readiness, outcome contract validation, task drift detection, and scoped learning indexing.
-- Rationale: User requirement explicitly calls for a solution not based only on markdown input. Schema-backed analyzers produce machine-checkable outputs and reproducible diagnostics.
+- Rationale: User requirement explicitly calls for a solution not based only on markdown input. Schema-backed analyzers produce machine-checkable outputs and reproducible diagnostics. Compiled runtime is shipped inside `extension/dist/` so Spec-Kit installs copy the executable analyzer payload together with extension commands and scripts.
 - Alternatives considered: Markdown-only checklists were rejected because they are not deterministic and cannot be consumed by automation reliably.
 
 ## Decision 3: Squad mode support strategy
