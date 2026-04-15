@@ -1,0 +1,48 @@
+# Deployment Manifest: spec-kit-squad-extension
+# All paths listed must be present in the release artifact.
+
+# Extension metadata
+extension/extension.yml
+
+# Command entrypoints
+extension/commands/speckit.squad.delegate-implement.md
+extension/commands/speckit.squad.collect-outcome.md
+extension/commands/speckit.squad.inject-plan-learnings.md
+extension/commands/speckit.squad.inject-task-learnings.md
+
+# Bash scripts
+extension/scripts/bash/_common.sh
+extension/scripts/bash/build-handoff-from-tasks.sh
+extension/scripts/bash/run-squad-implement.sh
+extension/scripts/bash/collect-learnings.sh
+extension/scripts/bash/inject-plan-learnings.sh
+extension/scripts/bash/inject-task-learnings.sh
+extension/scripts/bash/validate-squad-readiness.sh
+
+# PowerShell scripts
+extension/scripts/powershell/Common.ps1
+extension/scripts/powershell/build-handoff-from-tasks.ps1
+extension/scripts/powershell/run-squad-implement.ps1
+extension/scripts/powershell/collect-learnings.ps1
+extension/scripts/powershell/inject-plan-learnings.ps1
+extension/scripts/powershell/inject-task-learnings.ps1
+extension/scripts/powershell/validate-squad-readiness.ps1
+
+# Compiled runtime (from src/ via tsc)
+extension/dist/analyzers/readiness/check-squad-readiness.js
+extension/dist/analyzers/readiness/mode-adapter.js
+extension/dist/analyzers/readiness/compatibility-matrix.js
+extension/dist/analyzers/handoff/parse-tasks-md.js
+extension/dist/analyzers/handoff/build-handoff.js
+extension/dist/analyzers/handoff/task-manifest.js
+extension/dist/analyzers/outcomes/normalize-session-outcome.js
+extension/dist/analyzers/drift/detect-task-drift.js
+extension/dist/analyzers/runtime/entrypoints.js
+extension/dist/learning-store/writer.js
+extension/dist/learning-store/indexer.js
+extension/dist/learning-store/scope-filter.js
+extension/dist/learning-store/prompt-injector.js
+extension/dist/learning-store/project-scope.js
+extension/dist/contracts/validators.js
+extension/dist/contracts/schemas/implement-session.contract.json
+extension/dist/contracts/schemas/learning-record.schema.json

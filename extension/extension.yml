@@ -1,0 +1,61 @@
+name: spec-kit-squad
+version: 0.1.0
+description: Spec-Kit extension for delegating speckit.implement to Squad with learning capture and carry-forward
+author: m4cx
+
+commands:
+  - name: speckit.squad.delegate-implement
+    description: Validate Squad readiness and build deterministic handoff payload from tasks.md
+    entrypoint: commands/speckit.squad.delegate-implement.md
+  - name: speckit.squad.collect-outcome
+    description: Normalize and validate Squad implementation outcomes
+    entrypoint: commands/speckit.squad.collect-outcome.md
+  - name: speckit.squad.inject-plan-learnings
+    description: Inject project-scoped learnings into planning context
+    entrypoint: commands/speckit.squad.inject-plan-learnings.md
+  - name: speckit.squad.inject-task-learnings
+    description: Inject project-scoped learnings into task generation context
+    entrypoint: commands/speckit.squad.inject-task-learnings.md
+
+hooks:
+  before_implement:
+    - command: speckit.squad.delegate-implement
+      description: Validate Squad readiness and create handoff payload
+      enabled: true
+      optional: false
+  after_implement:
+    - command: speckit.squad.collect-outcome
+      description: Normalize outcomes and persist learnings
+      enabled: true
+      optional: false
+  before_plan:
+    - command: speckit.squad.inject-plan-learnings
+      description: Inject implementation learnings into planning context
+      enabled: true
+      optional: true
+  before_tasks:
+    - command: speckit.squad.inject-task-learnings
+      description: Inject implementation learnings into task generation context
+      enabled: true
+      optional: true
+
+scripts:
+  bash:
+    validate-squad-readiness: scripts/bash/validate-squad-readiness.sh
+    build-handoff-from-tasks: scripts/bash/build-handoff-from-tasks.sh
+    run-squad-implement: scripts/bash/run-squad-implement.sh
+    collect-learnings: scripts/bash/collect-learnings.sh
+    inject-plan-learnings: scripts/bash/inject-plan-learnings.sh
+    inject-task-learnings: scripts/bash/inject-task-learnings.sh
+  powershell:
+    validate-squad-readiness: scripts/powershell/validate-squad-readiness.ps1
+    build-handoff-from-tasks: scripts/powershell/build-handoff-from-tasks.ps1
+    run-squad-implement: scripts/powershell/run-squad-implement.ps1
+    collect-learnings: scripts/powershell/collect-learnings.ps1
+    inject-plan-learnings: scripts/powershell/inject-plan-learnings.ps1
+    inject-task-learnings: scripts/powershell/inject-task-learnings.ps1
+
+runtime:
+  dist: dist/
+  requires_build: true
+  build_command: npm run build

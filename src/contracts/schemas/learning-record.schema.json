@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://m4cx.dev/spec-kit-squad/contracts/learning-record.schema.json",
+  "title": "Learning Record Schema",
+  "type": "object",
+  "required": [
+    "learning_id",
+    "project_id",
+    "session_id",
+    "captured_at",
+    "agent",
+    "category",
+    "content",
+    "tags"
+  ],
+  "properties": {
+    "learning_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "enum": ["constraint", "decision", "risk", "pattern"]
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "source_ref": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}

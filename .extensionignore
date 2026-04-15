@@ -1,0 +1,21 @@
+# Exclude TypeScript source and dev artifacts from extension packaging
+src/
+tests/
+node_modules/
+*.ts
+!*.d.ts
+tsconfig.json
+jest.config.ts
+eslint.config.*
+.git/
+.github/
+.vscode/
+.specify/
+specs/
+coverage/
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+
+# Keep compiled runtime
+!extension/dist/**

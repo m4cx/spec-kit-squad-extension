@@ -416,3 +416,13 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Node.js / TypeScript
+dist/
+build/
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+coverage/
