@@ -5,12 +5,12 @@
 
 ## Summary
 
-Build a Spec-Kit extension that delegates `speckit.implement` orchestration to Squad using `tasks.md` as the handoff source of truth. Squad session outcomes and learnings are normalized into deterministic artifacts and automatically injected into `/speckit.plan` and `/speckit.tasks` via `before_plan` and `before_tasks` hooks. The implementation follows the Spec-Kit extension development guide, while adding TypeScript analyzers for reproducible validation, drift detection, and scoped learning retrieval.
+Build a Spec-Kit extension that delegates `speckit.implement` orchestration to Squad using `tasks.md` as the handoff source of truth. Squad session outcomes and learnings are normalized into deterministic artifacts and automatically injected into `/speckit.plan` and `/speckit.tasks` via `before_plan` and `before_tasks` hooks. The implementation follows the Spec-Kit extension development guide, while adding TypeScript analyzers for reproducible validation, drift detection, and scoped learning retrieval. Planning artifacts also include markdown usage documentation for extension users, covering installation, configuration, command flow, and troubleshooting.
 
 ## Technical Context
 
-**Language/Version**: Markdown command/prompt surface plus cross-platform scripts (PowerShell 7+, Bash 4+), with TypeScript/Node 20+ helper modules for deterministic parsers and contract validation  
-**Primary Dependencies**: Spec-Kit extension hooks (`before_implement`, `after_implement`, `before_plan`, `before_tasks`), Squad CLI (`@bradygaster/squad-cli`), optional Squad SDK shape awareness (`squad.config.ts`, generated `.squad/` state), JSON Schema validation for contract files  
+**Language/Version**: Markdown command surface, Bash 4+/PowerShell 7+ scripts, TypeScript on Node.js 20+ for deterministic analyzers  
+**Primary Dependencies**: Spec-Kit extension hooks (`before_implement`, `after_implement`, `before_plan`, `before_tasks`), `@bradygaster/squad-cli`, optional `@bradygaster/squad-sdk` shape support (`squad.config.ts` + `squad build`), JSON Schema validation tooling for contract files  
 **Storage**: Project-local `.squad/squad-kit-memory/` (`learnings.jsonl`, `learnings-index.json`, `sessions.log`)  
 **Testing**: `npm test`, `npm run lint`, contract validation, and script integration checks for Bash/PowerShell parity  
 **Target Platform**: macOS/Linux/Windows developer environments using Spec-Kit + Copilot + Squad
@@ -56,7 +56,7 @@ Build a Spec-Kit extension that delegates `speckit.implement` orchestration to S
 ├── plan.md
 ├── research.md
 ├── data-model.md
-├── quickstart.md
+├── quickstart.md                     # Quickstart plus user-facing usage guide for the extension
 ├── contracts/
 │   ├── implement-session.contract.json
 │   └── learning-record.schema.json
